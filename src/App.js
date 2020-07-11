@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import CardList from './components/CardList';
 import axios from 'axios'
+import { PageHeader, Input } from 'antd';
 
 class App extends React.Component{
 
@@ -10,12 +11,17 @@ class App extends React.Component{
     super()
     this.state = {
       users: [],
-      error: ''
+      error: '',
+      searchField: '',
+      searching: [],
+      search: ''
     }
   }
 
-  componentDidMount(){
-    axios.get('http://api.github.com/users/allyjay317')
+  componentDidUpdate(prevProps, prevState){
+    if(this.state.searching.length === 0 && this.state.search != prevState.search && this.state.search !== ''){
+      console.log(`current: ${this.state.search}, previous: ${prevState.search}`)
+      axios.get(`http://api.github.com/users/${this.state.search}`)
       .then(data =>{
         console.log(data)
         let user = 
@@ -37,7 +43,7 @@ class App extends React.Component{
           })
           
           this.setState({
-            users: [...this.state.users, user]
+            users: [user]
           })
         })
         .catch(error =>{
@@ -52,11 +58,35 @@ class App extends React.Component{
           error: this.state.error + 'Could not load data'
         })
       })
+    }
+  }
+  handleSearchChange = e =>{
+    let id = Date.now()
+    this.setState({
+      searching: [...this.state.searching, id],
+      searchField: e.target.value
+    })
+    window.setTimeout((e)=>{
+      this.setState({
+        searching: this.state.searching.filter((i) => i!== id)
+      })
+      if(this.state.searching.length === 0){
+        this.setState({
+          search: this.state.searchField
+        })
+      }
+    }, 2000)
   }
 
   render() {
     return (
       <div className="App">
+        <PageHeader
+          className='site-page-header'
+          onBack={() => this.setState({users: [], searchField: ''})}
+          title='GitHub User Lookup'
+          subTitle={<Input placeholder='search' name='search' value={this.state.searchField} onChange={this.handleSearchChange} />}
+          />
         <CardList userData={this.state.users} error={this.state.error}/>
       </div>
     );

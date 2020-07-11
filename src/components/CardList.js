@@ -1,5 +1,7 @@
 import React from 'react'
 import UserCard from './UserCard'
+import { Card, Row } from 'antd'
+
 
 class CardList extends React.Component{
     constructor(props){
@@ -9,9 +11,17 @@ class CardList extends React.Component{
     render(){
         return (
             <div>
-                {this.props.userData.map(user =>{
-                    return <UserCard data={user} />
-                })}
+                {this.props.userData.length > 0 ? 
+                (
+                    this.props.userData.map(user =>{
+                        return <Row justify='space-around'><UserCard data={user} /></Row>
+                    })
+                ) : (
+                    <div>
+                        <h1>Search for a User!</h1>
+                    </div>
+                )}
+                
             </div>
         )
     }

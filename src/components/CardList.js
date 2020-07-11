@@ -14,7 +14,7 @@ class CardList extends React.Component{
                 {this.props.userData.length > 0 ? 
                 (
                     this.props.userData.map(user =>{
-                        return <Row justify='space-around'><UserCard data={user} /></Row>
+                        return <Row justify='space-around' style={{width: '50%', marginLeft: '25%'}}><UserCard data={user} /></Row>
                     })
                 ) : (
                     <div>

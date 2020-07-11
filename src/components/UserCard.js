@@ -1,5 +1,6 @@
 import React from 'react'
 import { Card, Row, Col, Carousel, Button } from 'antd'
+import GitHubCalendar from 'react-github-calendar'
 const { Meta } = Card
 
 class UserCard extends React.Component{
@@ -10,6 +11,7 @@ class UserCard extends React.Component{
             showFollowers: false
         }
     }
+    
 
     componentDidUpdate(prevProps, prevState){
         if(prevProps.data !== this.props.data){
@@ -32,6 +34,7 @@ class UserCard extends React.Component{
                             <a href={this.props.data.url}>
                                 Visit Github Page
                             </a>
+                            <GitHubCalendar username={this.props.data.userName} />
                             {this.props.data.followers !== undefined ? (
                             <div>
                                 <Button onClick={() => this.setState({showFollowers: !this.state.showFollowers})}>
